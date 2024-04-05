@@ -15,9 +15,9 @@ Ziyu Guo, Weiqin Zhao, Shujun Wang, Lequan Yu
 
 ## Update:
 
-Sorry for the late update. Then this is a tutorial wrote before about the use of **[HIGT](https://github.com/HKU-MedAI/HIGT/tree/main/tutorials/tut_HIGT.ipynb)** and **[MulGT](https://github.com/HKU-MedAI/HIGT/tree/main/tutorials/tut_MulGT.ipynb)** (including data preprocessing and training and testing). 
+We apologize for the delay in updates. Below is a tutorial that encompasses the usage of **[HIGT](https://github.com/HKU-MedAI/HIGT/tree/main/tutorials/tut_HIGT.ipynb)** and **[MulGT](https://github.com/HKU-MedAI/HIGT/tree/main/tutorials/tut_MulGT.ipynb)** , covering aspects from data preprocessing to the training and testing phases. This tutorial is designed with the goal of standardizing the entire process and is implemented on the foundation of **[CLAM](https://github.com/mahmoodlab/CLAM)** for ease of use and deployment.
 
-In order to unify the entire process, the tutorial is implemented based on **[CLAM](https://github.com/mahmoodlab/CLAM)**. And in order to facilitate the deployment of the entire library, please follow the steps below under Ubuntu. And the *core_utils_re.py*, *create_splits_seq_re.py* and *extract_features_fp_re.py* are re-writed version of corresponding python file in CLAM.
+To ensure a seamless setup, please follow the instructions below for Ubuntu systems. Note that *core_utils_re.py*, *create_splits_seq_re.py*, and *extract_features_fp_re.py* are revised versions of their respective files in CLAM, changed a little bit for more convenience with HIGT.
 
 ### 1.
 ```
@@ -29,4 +29,4 @@ In order to unify the entire process, the tutorial is implemented based on **[CL
 !mv /CLAM/* /
 ```
 
-Finally, sincerely hope this tutorial can help you solve your problems. And if there are any problems when using it, please leave a issue and we will provide feedback as soon as possible.
+We hope this tutorial aids you in your projects. Should you encounter any issues, please don't hesitate to raise an issue on our GitHub page. Our team is committed to providing prompt and helpful feedback.
