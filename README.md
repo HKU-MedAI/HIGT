@@ -1,20 +1,14 @@
-# HIGT
+# HIGT: Hierarchical Interaction Graph-Transformer for Whole Slide Image Analysis
 
-## HIGT: Hierarchical Interaction Graph-Transformer for Whole Slide Image Analysis
+### [Tutorial](https://github.com/mateguo0/WSI_Tuts/blob/main/tut_HIGT.ipynb) | [Paper](https://arxiv.org/abs/2309.07400)
 
 
-## Run
+## Overview:
 
-First, setting the data path and hyperparameters in the file ***train.py***. Then, experiments can be run using the following command-line:
+![alt text](/pics/image.png)
 
-```bash
-python train.py
-```
+## Update:
 
-The test results will be printed out at the end.
+I'm very sorry for the late update. Then this is a tutorial I wrote before about the use of [HIGT](https://github.com/mateguo0/WSI_Tuts/blob/main/tut_HIGT.ipynb) and [MulGT](https://github.com/mateguo0/WSI_Tuts/blob/main/tut_MulGT.ipynb) (including data preprocessing and training and testing). 
 
-## Data
-
-Coming soon.
-
-## Citation
+Besides, I very hope this tutorial can help you solve your problems. And if there are any problems when using the tutorial, please leave a issue and I will provide feedback as soon as possible.
