@@ -1,14 +1,32 @@
 # HIGT: Hierarchical Interaction Graph-Transformer for Whole Slide Image Analysis
 
-### [Tutorial](https://github.com/mateguo0/WSI_Tuts/blob/main/tut_HIGT.ipynb) | [Paper](https://arxiv.org/abs/2309.07400)
+### [Tutorial](https://github.com/HKU-MedAI/HIGT/tree/main/tutorials/tut_HIGT.ipynb) | [Paper](https://arxiv.org/abs/2309.07400)
+
+
+### Authors
+
+Ziyu Guo, Weiqin Zhao, Shujun Wang, Lequan Yu
 
 
 ## Overview:
 
 ![alt text](/pics/image.png)
 
+
 ## Update:
 
-I'm very sorry for the late update. Then this is a tutorial I wrote before about the use of [HIGT](https://github.com/mateguo0/WSI_Tuts/blob/main/tut_HIGT.ipynb) and [MulGT](https://github.com/mateguo0/WSI_Tuts/blob/main/tut_MulGT.ipynb) (including data preprocessing and training and testing). 
+I'm very sorry for the late update. Then this is a tutorial I wrote before about the use of **[HIGT](https://github.com/HKU-MedAI/HIGT/tree/main/tutorials/tut_HIGT.ipynb)** and **[MulGT](https://github.com/HKU-MedAI/HIGT/tree/main/tutorials/tut_MulGT.ipynb)** (including data preprocessing and training and testing). 
 
-Besides, I very hope this tutorial can help you solve your problems. And if there are any problems when using the tutorial, please leave a issue and I will provide feedback as soon as possible.
+In order to unify the entire process, the tutorial is implemented based on [CLAM](https://github.com/mahmoodlab/CLAM). And in order to facilitate the deployment of the entire library, please follow the steps below under Ubuntu.
+
+### 1.
+```
+!git clone https://github.com/mahmoodlab/CLAM.git .
+```
+
+### 2.
+```
+!mv /CLAM/* /
+```
+
+Finally, I sincerely hope this tutorial can help you solve your problems. And if there are any problems when using it, please leave a issue and I will provide feedback as soon as possible.
