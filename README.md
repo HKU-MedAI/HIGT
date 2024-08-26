@@ -30,3 +30,7 @@ To ensure a seamless setup, please follow the instructions below for Ubuntu syst
 ```
 
 We hope this tutorial aids you in your projects. Should you encounter any issues, please don't hesitate to raise an issue on our GitHub page. Our team is committed to providing prompt and helpful feedback.
+
+### 3.
+
+Since CLAM has recently changed the contents of the datasets folder, a **[zip file](https://github.com/HKU-MedAI/HIGT/tree/main/datasets.zip)** of the previous version of the datasets folder is provided here.
