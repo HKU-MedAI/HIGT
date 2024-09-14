@@ -2,19 +2,18 @@ import os
 import warnings
 warnings.filterwarnings("ignore")
 import argparse
-
+import pandas as pd
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 def get_params():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="HiGT")
-    parser.add_argument("--all_data_path", type=str, default="/home/r10user13/final_HWSI/HWSI_re/DS/lung/2typing_lung_kimia_gnn_data.pkl", help="Path of training data")
+    parser.add_argument("--all_data_path", type=str, default="Path of Graph Data")
+    parser.add_argument("--label_path", type=str, default="Path of label File")
     parser.add_argument("--one_layer", type=bool, default=True)
-    parser.add_argument("--patient_and_label_path", type=str, default="/home/r10user13/final_HWSI/HWSI_re/DS/lung/2typing_.pkl",
-                        help="Path of patient and label data")
-    parser.add_argument("--repeat_num", type=int, default=3, help="Number of repetitions of the experiment")
-    parser.add_argument("--divide_seed", type=int, default=2023, help="Data division seed")
+    parser.add_argument("--repeat_num", type=int, default=1, help="Number of repetitions of the experiment")
+    parser.add_argument("--divide_seed", type=int, default=2023, help="Seed")
     parser.add_argument("--drop_out_ratio", type=float, default=0.2, help="Drop_out_ratio")
     parser.add_argument("--lr", type=float, default=0.0001, help="Learning rate of model training")
     parser.add_argument("--epochs", type=int, default=50, help="Cycle times of model training")
@@ -172,15 +171,22 @@ def softmax(x):
     s = x_exp / x_sum
     return s
 
-
 def main(args):
 
     sys.stdout = Logger(sys.stdout)
     sys.stderr = Logger(sys.stderr)
 
     loss_fun = torch.nn.CrossEntropyLoss()
+    
+    
     all_data = joblib.load(args.all_data_path)
-    patient_and_label = joblib.load(args.patient_and_label_path)
+    # patient_and_label = joblib.load(args.patient_and_label_path)
+    df = pd.read_csv(args.label_path)
+    df['label_u'], unique = pd.factorize(df['label'])
+    k = [i.replace(".svs","")for i in df["slide_id"].to_list()]
+    v = df["label_u"].to_list()
+    patient_and_label = dict(zip(k, v))
+        
     patiens_list = []
     label_list = []
 
@@ -208,15 +214,15 @@ def main(args):
         for train_index, test_index in kf.split(patiens_list, label_list):
             fold_num = fold_num + 1
             print('fold:', fold_num)
-            best_acc_val_fold = 0.0
+            # best_acc_val_fold = 0.0
             best_acc_test_fold = 0.0
-            best_auc_val_fold = 0
+            # best_auc_val_fold = 0
             best_auc_test_fold = 0
-            train_index_split, val_index_split = return_train_val_index(list(train_index), label_list, seed=1)
-            data_for_train, label_for_train = reuturn_data_label(all_data, train_index_split, patiens_list, label_list,
+            # train_index_split, val_index_split = return_train_val_index(list(train_index), label_list, seed=1)
+            data_for_train, label_for_train = reuturn_data_label(all_data, list(train_index), patiens_list, label_list,
                                                                  args.batch_size)
-            data_for_val, label_for_val = reuturn_data_label(all_data, val_index_split, patiens_list, label_list,
-                                                             args.batch_size)
+            # data_for_val, label_for_val = reuturn_data_label(all_data, val_index_split, patiens_list, label_list,
+            #                                                  args.batch_size)
             data_for_test, label_for_test = reuturn_data_label(all_data, list(test_index), patiens_list, label_list,
                                                                args.batch_size)
             train_sample_num = 0
@@ -237,10 +243,10 @@ def main(args):
                 fusion_exp_ratio=args.fusion_exp_ratio,
                 out_classes = args.num_classes
             )
+            
             model = model.to(device)
             optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=5e-4)
             scheduler = torch.optim.lr_scheduler.StepLR(step_size=20, gamma=0.9, optimizer=optimizer)
-            print("当前设备号：",torch.cuda.current_device(), "当前GPU数目：", torch.cuda.device_count())
 
             for epoch_num in range(args.epochs):
                 model.train()
@@ -259,10 +265,10 @@ def main(args):
                         data_train_single = data_train_single.to(device)
                         label_train_single = torch.tensor([label_train_single]).to(device)
 
-                        try:
-                            Y_prob = model(data_train_single)
-                        except:
-                            pass
+                        # try:
+                        Y_prob = model(data_train_single)
+                        # except:
+                        #     pass
                         output_for_train = Y_prob
                         prediction_for_train = torch.argmax(Y_prob)
                         loss = loss_fun(output_for_train,F.one_hot(label_train_single, num_classes=args.num_classes).squeeze().float())
@@ -289,7 +295,7 @@ def main(args):
                     best_acc_test_fold = acc_for_test
                     print("best_acc_plus_auc_test_fold "+str(best_acc_test_fold) + ", save t_model")
                     torch.save(model.state_dict(),
-                               './weights/' + f'patient_wise_no_val_fold' + str(fold_num) + '_best.pth')
+                               f'{args.weight_path}' + f'patient_wise_no_val_fold' + str(fold_num) + '_best.pth')
 
                 print(
                     "epoch: {:2d}, train_loss: {:.4f}, train_acc: {:.4f}, train_micro_auc: {:.4f}, train_macro_auc: {:.4f}, "
@@ -303,7 +309,7 @@ def main(args):
                 print(
                     'Time completed in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
 
-            model.load_state_dict(torch.load('./weights/' + f'patient_wise_no_val_fold' + str(fold_num) + '_best.pth'))
+            model.load_state_dict(torch.load(f'{args.weight_path}' + f'patient_wise_no_val_fold' + str(fold_num) + '_best.pth'))
             model.eval()
             test_pre = []
             test_res = []
@@ -316,10 +322,10 @@ def main(args):
                         label_of_test.append(label_val_test_single)
                         data_val_test_single = data_val_test_single.to(device)
                         label_val_test_single = torch.tensor([label_val_test_single]).to(device)
-                        try:
-                            Y_prob = model(data_val_test_single['data_id'])
-                        except:
-                            pass
+                        # try:
+                        Y_prob = model(data_val_test_single['data_id'])
+                        # except:
+                        #     pass
                         res = Y_prob
                         prediction_for_val_test = torch.argmax(Y_prob)
 
@@ -349,7 +355,6 @@ def main(args):
             print(confusion)
             print('report:')
             print(report)
-
 
             print("test_predict: "+str(test_pre))
             print("label_of_test: "+str(label_of_test))
